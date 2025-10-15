@@ -9,6 +9,24 @@ class CostFunc:
         self.R = R
         self.Q_terminal = Q_terminal
         self.Constrain =  SoftConstrain
+        self.SoftConstrain = None
+        self.state_ref =None
+        self.state = None
+        self.control = None
+        self.StageCost =None
+        self.TerminalCost = None
+        self.StageCostFunc =None
+        self.TerminalCostFunc = None
+        self.StageCostFunction = None
+        self.lu = None
+        self.lx = None
+        self.luu_fun = None
+        self.lu_fun = None
+        self.lxx_fun = None
+        self.lx_fun = None
+        self.lux_fun = None
+        self.p_fun = None
+        self.P_fun = None
         self.soft_constrain_formular()
         self.state_cost()
         self.calc_jacobian()
@@ -45,13 +63,13 @@ class CostFunc:
         self.TerminalCostFunc = ca.Function("TerminalCost", [self.state_ref, self.state], [self.TerminalCost])
 
     def calc_cost(self, State, Control):
-        Cost = 0
+        cost = 0
         self.StageCostFunction = 0
         for i in range( len(self.ref_path) - 1):
-            Cost += self.StageCostFunc(self.ref_path[i], State[i], Control[i])
+            cost += self.StageCostFunc(self.ref_path[i], State[i], Control[i])
             self.StageCostFunction += self.StageCostFunc(self.ref_path[i],self.state,self.control)
-        Cost += self.TerminalCostFunc(self.ref_path[-1], State[-1])
-        return Cost
+        cost += self.TerminalCostFunc(self.ref_path[-1], State[-1])
+        return cost
 
     def calc_jacobian(self):
         self.lx = ca.jacobian(self.StageCost, self.state)
