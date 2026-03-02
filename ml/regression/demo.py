@@ -1,6 +1,5 @@
 import math
 
-import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -22,6 +21,6 @@ for mu, sigma in params:
     y = []
     for i in x:
         y.append(normal(i, mu, sigma))
-    plt.plot(x, y, label=[f'mean {mu}, std {sigma}'])
+    plt.plot(x, y, label=f'mean {mu}, std {sigma}')
 plt.legend()
-plt.show()
+# plt.savefig('normal_distributions.png')
